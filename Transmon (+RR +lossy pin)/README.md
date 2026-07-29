@@ -1,4 +1,4 @@
-# Transmon + readout resonator + lossy pin
+﻿# Transmon + readout resonator + lossy pin
 
 This folder contains a reproducible Ansys HFSS -> STEP/Gmsh -> Palace -> pyEPR
 workflow for the `galvanic_one_rr_pin_no_wirebond` design.
@@ -10,14 +10,15 @@ workflow for the `galvanic_one_rr_pin_no_wirebond` design.
   reference calculation.
 - `export_mesh/` - exported device geometry and the scripts used to export
   Ansys metadata and build the Gmsh mesh.
-- `palace/palace_config_resolved.json` - resolved Palace eigenmode input.
+- `palace/palace_config.json` - Palace eigenmode input used for the supplied Palace result set.
 - `pyepr/` - Palace-to-pyEPR bridge, analysis notebook, and a small sample of
   Palace postprocessing output.
 
 ## Physical model
 
-- Josephson junction: physical mesh group `9` (`JJ`), 10 nH inductance in
-  parallel with 3 fF capacitance.
+- Josephson junction: physical mesh group `9` (`JJ`), 10 nH inductance. The Palace
+  run uses no explicit parallel junction capacitance (`C: 0.0`). The HFSS reference
+  model has a 3 fF parallel capacitance, so this is a known model difference.
 - Substrate: sapphire, relative permittivity 10.
 - The JJ, pads, leads, and readout resonator are two-sided internal mesh
   sheets. The JJ lumped-port direction is `[0, 1, 0]`.
@@ -31,7 +32,7 @@ workflow for the `galvanic_one_rr_pin_no_wirebond` design.
 3. Run `export_mesh/build_from_single_step_v9.py` from the export directory to
    regenerate `transmon_simple_RR_pin_nowire.msh`. It requires the Gmsh Python
    package and the matching STEP/config files.
-4. Run Palace with a copy of `palace/palace_config_resolved.json`, editing the
+4. Run Palace with a copy of `palace/palace_config.json`, editing the
    mesh path and output directory for the local machine. Do not overwrite the
    supplied sample results.
 5. In the `qiskit_metal` / pyEPR environment, open
@@ -49,5 +50,6 @@ postprocessing notebook after setting `POSTPRO` accordingly.
 The Palace JJ port is correctly present and the inferred qubit-resonator
 coupling agrees closely with Ansys. The remaining discrepancy is the bare
 cavity-qubit detuning. The supplied Palace configuration uses first-order
-elements and its AMR error indicator has not reached the configured tolerance;
-a higher-order, more-refined Palace convergence study is the next check.
+elements. Before drawing a convergence conclusion, compare the final AMR Norm in
+`error-indicators.csv` with `Model.Refinement.Tol`, and check whether the run stopped
+at `MaxIts` or `MaxSize`.
