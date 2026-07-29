@@ -1,0 +1,710 @@
+{
+  "schema_version": 2,
+  "project": "test_export",
+  "design": "galvanic_one_rr_pin",
+  "step_file": "device.step",
+  "geometry_units": "mm",
+  "source_model_units": "mm",
+  "L_JJ_nH": 10.0,
+  "C_JJ_fF": 3.0,
+  "sapphire_permittivity": 10.0,
+  "materials": {
+    "vacuum": {
+      "permittivity": 1.0,
+      "permeability": 1.0,
+      "loss_tangent": 0.0,
+      "magnetic_loss_tangent": 0.0,
+      "conductivity_S_per_m": 0.0,
+      "expressions": {
+        "permittivity": "1",
+        "permeability": "1.0",
+        "dielectric_loss_tangent": "0",
+        "magnetic_loss_tangent": "0",
+        "conductivity": "0"
+      }
+    },
+    "copper": {
+      "permittivity": 1.0,
+      "permeability": 0.999991,
+      "loss_tangent": 0.0,
+      "magnetic_loss_tangent": 0.0,
+      "conductivity_S_per_m": 58000000.0,
+      "expressions": {
+        "permittivity": "1.0",
+        "permeability": "0.999991",
+        "dielectric_loss_tangent": "0",
+        "magnetic_loss_tangent": "0",
+        "conductivity": "58000000"
+      }
+    },
+    "sapphire": {
+      "permittivity": 10.0,
+      "permeability": 1.0,
+      "loss_tangent": 0.0,
+      "magnetic_loss_tangent": 0.0,
+      "conductivity_S_per_m": 0.0,
+      "expressions": {
+        "permittivity": "10",
+        "permeability": "1.0",
+        "dielectric_loss_tangent": "0",
+        "magnetic_loss_tangent": "0",
+        "conductivity": "0"
+      }
+    },
+    "perfect conductor": {
+      "permittivity": 1.0,
+      "permeability": 1.0,
+      "loss_tangent": 0.0,
+      "magnetic_loss_tangent": 0.0,
+      "conductivity_S_per_m": 1e+30,
+      "expressions": {
+        "permittivity": "1.0",
+        "permeability": "1.0",
+        "dielectric_loss_tangent": "0",
+        "magnetic_loss_tangent": "0",
+        "conductivity": "1e+30"
+      }
+    },
+    "diamond_pl_cvd": {
+      "permittivity": 3.5,
+      "permeability": 1.0,
+      "loss_tangent": 0.0,
+      "magnetic_loss_tangent": 0.0,
+      "conductivity_S_per_m": 0.0,
+      "expressions": {
+        "permittivity": "3.5",
+        "permeability": "1.0",
+        "dielectric_loss_tangent": "0",
+        "magnetic_loss_tangent": "0",
+        "conductivity": "0"
+      }
+    }
+  },
+  "mesh_sizes_mm": {
+    "JJ": 0.0002,
+    "thin_lead": 0.0002,
+    "medium_lead": 0.003,
+    "pads": 0.05,
+    "cavity": 1.0,
+    "RR": 0.05
+  },
+  "mesh_operations": {
+    "JJ_mesh_0.2um": {
+      "name": "JJ_mesh_0.2um",
+      "type": "Length Based",
+      "size_mm": 0.0002,
+      "size_expression": "0.2um",
+      "assignment_type": "objects",
+      "assignment": [
+        "JJ"
+      ],
+      "props": {
+        "Name": "JJ_mesh_0.2um",
+        "Type": "Length Based",
+        "Region": "On Selection",
+        "Enabled": "True",
+        "Restrict Length": "True",
+        "Max Length": "0.2um",
+        "Restrict Max Elems": "False",
+        "Objects": "['JJ']",
+        "Faces": "[]",
+        "Edges": "[]"
+      }
+    },
+    "thin_lead_0.2um": {
+      "name": "thin_lead_0.2um",
+      "type": "Length Based",
+      "size_mm": 0.0002,
+      "size_expression": "0.2um",
+      "assignment_type": "objects",
+      "assignment": [
+        "thin_lead"
+      ],
+      "props": {
+        "Name": "thin_lead_0.2um",
+        "Type": "Length Based",
+        "Region": "On Selection",
+        "Enabled": "True",
+        "Restrict Length": "True",
+        "Max Length": "0.2um",
+        "Restrict Max Elems": "False",
+        "Objects": "['thin_lead']",
+        "Faces": "[]",
+        "Edges": "[]"
+      }
+    },
+    "medium_3um": {
+      "name": "medium_3um",
+      "type": "Length Based",
+      "size_mm": 0.003,
+      "size_expression": "3um",
+      "assignment_type": "objects",
+      "assignment": [
+        "medium_lead"
+      ],
+      "props": {
+        "Name": "medium_3um",
+        "Type": "Length Based",
+        "Region": "On Selection",
+        "Enabled": "True",
+        "Restrict Length": "True",
+        "Max Length": "3um",
+        "Restrict Max Elems": "False",
+        "Objects": "['medium_lead']",
+        "Faces": "[]",
+        "Edges": "[]"
+      }
+    },
+    "pads_50um": {
+      "name": "pads_50um",
+      "type": "Length Based",
+      "size_mm": 0.05,
+      "size_expression": "50um",
+      "assignment_type": "objects",
+      "assignment": [
+        "pads"
+      ],
+      "props": {
+        "Name": "pads_50um",
+        "Type": "Length Based",
+        "Region": "On Selection",
+        "Enabled": "True",
+        "Restrict Length": "True",
+        "Max Length": "50um",
+        "Restrict Max Elems": "False",
+        "Objects": "['pads']",
+        "Faces": "[]",
+        "Edges": "[]"
+      }
+    },
+    "cav_pin1mm": {
+      "name": "cav_pin1mm",
+      "type": "Length Based",
+      "size_mm": 1.0,
+      "size_expression": "1mm",
+      "assignment_type": "objects",
+      "assignment": [
+        "pin"
+      ],
+      "props": {
+        "Name": "cav_pin1mm",
+        "Type": "Length Based",
+        "Region": "On Selection",
+        "Enabled": "True",
+        "Restrict Length": "True",
+        "Max Length": "1mm",
+        "Restrict Max Elems": "False",
+        "Objects": "['pin']",
+        "Faces": "[]",
+        "Edges": "[]"
+      }
+    },
+    "RR_mesh_0.05mm": {
+      "name": "RR_mesh_0.05mm",
+      "type": "Length Based",
+      "size_mm": 0.05,
+      "size_expression": "0.05mm",
+      "assignment_type": "objects",
+      "assignment": [
+        "RR"
+      ],
+      "props": {
+        "Name": "RR_mesh_0.05mm",
+        "Type": "Length Based",
+        "Region": "On Selection",
+        "Enabled": "True",
+        "Restrict Length": "True",
+        "Max Length": "0.05mm",
+        "Restrict Max Elems": "False",
+        "Objects": "['RR']",
+        "Faces": "[]",
+        "Edges": "[]"
+      }
+    }
+  },
+  "boundaries": {
+    "JJ_inductance": {
+      "type": "Lumped RLC",
+      "assignment": [
+        "JJ"
+      ],
+      "assignment_ids": [
+        "137"
+      ],
+      "assignment_faces": [
+        {
+          "face_id": "137",
+          "body": "JJ",
+          "center_mm": [
+            0.0,
+            6.0925,
+            17.0
+          ],
+          "bbox_sample_mm": [
+            -0.0005,
+            6.09155,
+            17.0,
+            0.0005,
+            6.09345,
+            17.0
+          ],
+          "area_mm2": 1.9000000000005125e-06,
+          "normal": [
+            -0.0,
+            -0.0,
+            1.0
+          ],
+          "is_planar": true
+        }
+      ],
+      "role": "junction",
+      "props": {
+        "Name": "JJ_inductance",
+        "Type": "Lumped RLC",
+        "RLC Type": "Parallel",
+        "RLC Type/Choices": "['Serial', 'Parallel']",
+        "Use Resist": "False",
+        "Resistance": "0ohm",
+        "Use Induct": "True",
+        "Inductance": "L_JJ",
+        "Use Cap": "True",
+        "Capacitance": "3fF"
+      },
+      "rlc_type": "Parallel",
+      "L_nH": 10.0,
+      "L_expression": "L_JJ",
+      "C_fF": 3.0,
+      "C_expression": "3fF"
+    },
+    "PerfE_Pads": {
+      "type": "Perfect E",
+      "assignment": [
+        "thin_lead",
+        "pads",
+        "medium_lead"
+      ],
+      "assignment_ids": [
+        "164",
+        "165",
+        "85",
+        "203",
+        "109",
+        "191"
+      ],
+      "assignment_faces": [
+        {
+          "face_id": "164",
+          "body": "thin_lead",
+          "center_mm": [
+            0.0,
+            6.099225,
+            17.0
+          ],
+          "bbox_sample_mm": [
+            -0.0005,
+            6.09345,
+            17.0,
+            0.0005,
+            6.105,
+            17.0
+          ],
+          "area_mm2": 1.1549999999999061e-05,
+          "normal": [
+            0.0,
+            -0.0,
+            1.0
+          ],
+          "is_planar": true
+        },
+        {
+          "face_id": "165",
+          "body": "thin_lead",
+          "center_mm": [
+            6.8299645473678e-20,
+            6.085775,
+            17.0
+          ],
+          "bbox_sample_mm": [
+            -0.0005,
+            6.08,
+            17.0,
+            0.0005,
+            6.09155,
+            17.0
+          ],
+          "area_mm2": 1.1550000000000448e-05,
+          "normal": [
+            -0.0,
+            -0.0,
+            1.0
+          ],
+          "is_planar": true
+        },
+        {
+          "face_id": "85",
+          "body": "pads",
+          "center_mm": [
+            8.24706493073807e-18,
+            5.75082253240279,
+            17.0
+          ],
+          "bbox_sample_mm": [
+            -0.5,
+            5.5,
+            17.0,
+            0.5,
+            6.05,
+            17.0
+          ],
+          "area_mm2": 0.5014999999999997,
+          "normal": [
+            -0.0,
+            -0.0,
+            1.0
+          ],
+          "is_planar": true
+        },
+        {
+          "face_id": "203",
+          "body": "pads",
+          "center_mm": [
+            1.05562431113447e-16,
+            6.43417746759721,
+            17.0
+          ],
+          "bbox_sample_mm": [
+            -0.5,
+            6.135,
+            17.0,
+            0.5,
+            6.685,
+            17.0
+          ],
+          "area_mm2": 0.5015000000000008,
+          "normal": [
+            -0.0,
+            -0.0,
+            1.0
+          ],
+          "is_planar": true
+        },
+        {
+          "face_id": "109",
+          "body": "medium_lead",
+          "center_mm": [
+            0.0,
+            6.065,
+            17.0
+          ],
+          "bbox_sample_mm": [
+            -0.005,
+            6.05,
+            17.0,
+            0.005,
+            6.08,
+            17.0
+          ],
+          "area_mm2": 0.0003000000000000016,
+          "normal": [
+            -0.0,
+            -0.0,
+            1.0
+          ],
+          "is_planar": true
+        },
+        {
+          "face_id": "191",
+          "body": "medium_lead",
+          "center_mm": [
+            0.0,
+            6.12,
+            17.0
+          ],
+          "bbox_sample_mm": [
+            -0.005,
+            6.105,
+            17.0,
+            0.005,
+            6.135,
+            17.0
+          ],
+          "area_mm2": 0.0003000000000000016,
+          "normal": [
+            -0.0,
+            -0.0,
+            1.0
+          ],
+          "is_planar": true
+        }
+      ],
+      "role": "pec_sheet",
+      "props": {
+        "Name": "PerfE_Pads",
+        "Type": "Perfect E",
+        "Inf Ground Plane": "False"
+      }
+    },
+    "PerfE_RR": {
+      "type": "Perfect E",
+      "assignment": [
+        "RR"
+      ],
+      "assignment_ids": [
+        "439"
+      ],
+      "assignment_faces": [
+        {
+          "face_id": "439",
+          "body": "RR",
+          "center_mm": [
+            -2.20581496680807e-17,
+            11.185,
+            17.0
+          ],
+          "bbox_sample_mm": [
+            -0.15,
+            7.185,
+            17.0,
+            0.15,
+            15.185,
+            17.0
+          ],
+          "area_mm2": 2.3999999999999995,
+          "normal": [
+            -0.0,
+            -0.0,
+            1.0
+          ],
+          "is_planar": true
+        }
+      ],
+      "role": "pec_sheet",
+      "props": {
+        "Name": "PerfE_RR",
+        "Type": "Perfect E",
+        "Inf Ground Plane": "False"
+      }
+    },
+    "Imped_pin": {
+      "type": "Impedance",
+      "assignment": [
+        "cavity"
+      ],
+      "assignment_ids": [
+        "457"
+      ],
+      "assignment_faces": [
+        {
+          "face_id": "457",
+          "body": "cavity",
+          "center_mm": [
+            -1.34809480517219e-16,
+            10.185,
+            25.5
+          ],
+          "bbox_sample_mm": [
+            -1.0,
+            10.185,
+            25.5,
+            1.0,
+            10.185,
+            25.5
+          ],
+          "area_mm2": 3.1415926535897936,
+          "normal": null,
+          "is_planar": true
+        }
+      ],
+      "role": "impedance_sheet",
+      "props": {
+        "Name": "Imped_pin",
+        "Type": "Impedance",
+        "Resistance": "50",
+        "Reactance": "0",
+        "Inf Ground Plane": "False"
+      },
+      "Rs_expression": "50",
+      "Xs_expression": "0",
+      "Rs_ohm_per_sq": 50.0,
+      "Xs_ohm_per_sq": 0.0
+    }
+  },
+  "objects": {
+    "cavity": {
+      "name": "cavity",
+      "dimension": 3,
+      "geometry_type": "solid",
+      "material": "vacuum",
+      "model": true,
+      "solve_inside": true,
+      "domain_role": "dielectric",
+      "modeling_strategy": "volume_dielectric"
+    },
+    "pin": {
+      "name": "pin",
+      "dimension": 3,
+      "geometry_type": "solid",
+      "material": "perfect conductor",
+      "model": true,
+      "solve_inside": false,
+      "domain_role": "pec_solid",
+      "modeling_strategy": "surface_pec"
+    },
+    "chip": {
+      "name": "chip",
+      "dimension": 3,
+      "geometry_type": "solid",
+      "material": "sapphire",
+      "model": true,
+      "solve_inside": true,
+      "domain_role": "dielectric",
+      "modeling_strategy": "volume_dielectric"
+    },
+    "Bondwire1": {
+      "name": "Bondwire1",
+      "dimension": 3,
+      "geometry_type": "solid",
+      "material": "perfect conductor",
+      "model": true,
+      "solve_inside": false,
+      "domain_role": "pec_solid",
+      "modeling_strategy": "surface_pec"
+    },
+    "Pin_1": {
+      "name": "Pin_1",
+      "dimension": 3,
+      "geometry_type": "solid",
+      "material": "copper",
+      "model": true,
+      "solve_inside": false,
+      "domain_role": "conductor_solid",
+      "modeling_strategy": "surface_conductor"
+    },
+    "pads": {
+      "name": "pads",
+      "dimension": 2,
+      "geometry_type": "sheet",
+      "material": "",
+      "model": true,
+      "solve_inside": null,
+      "domain_role": "pec_sheet",
+      "modeling_strategy": "pec_sheet"
+    },
+    "medium_lead": {
+      "name": "medium_lead",
+      "dimension": 2,
+      "geometry_type": "sheet",
+      "material": "",
+      "model": true,
+      "solve_inside": null,
+      "domain_role": "pec_sheet",
+      "modeling_strategy": "pec_sheet"
+    },
+    "thin_lead": {
+      "name": "thin_lead",
+      "dimension": 2,
+      "geometry_type": "sheet",
+      "material": "",
+      "model": true,
+      "solve_inside": null,
+      "domain_role": "pec_sheet",
+      "modeling_strategy": "pec_sheet"
+    },
+    "JJ": {
+      "name": "JJ",
+      "dimension": 2,
+      "geometry_type": "sheet",
+      "material": "",
+      "model": true,
+      "solve_inside": null,
+      "domain_role": "junction",
+      "modeling_strategy": "junction"
+    },
+    "RR": {
+      "name": "RR",
+      "dimension": 2,
+      "geometry_type": "sheet",
+      "material": "",
+      "model": true,
+      "solve_inside": null,
+      "domain_role": "pec_sheet",
+      "modeling_strategy": "pec_sheet"
+    }
+  },
+  "body_roles": {
+    "cavity": "dielectric",
+    "pin": "pec_solid",
+    "chip": "dielectric",
+    "Bondwire1": "pec_solid",
+    "Pin_1": "conductor_solid",
+    "pads": "pec_sheet",
+    "medium_lead": "pec_sheet",
+    "thin_lead": "pec_sheet",
+    "JJ": "junction",
+    "RR": "pec_sheet"
+  },
+  "design_variables_mm": {
+    "rad": 4.0,
+    "height": 35.0,
+    "pin_rad": 1.5,
+    "pin_heght": 17.0,
+    "chip_offset": 1.0,
+    "chip_wid": 4.0,
+    "chip_len": 20.0,
+    "chip_thick": 0.43,
+    "pad_x": 1.0,
+    "pad_y": 0.5,
+    "pad_offset": 3.0,
+    "coarse_x": 0.03,
+    "coarse_y": 0.05,
+    "medium_x": 0.01,
+    "medium_y": 0.03,
+    "thin_x": 0.001,
+    "thin_y": 0.025,
+    "jj_x": 0.001,
+    "jj_y": 0.0019,
+    "wg_rad": 3.0,
+    "rr_x": 0.3,
+    "rr_y": 8.0,
+    "rr_offset": 0.5,
+    "pin_offset": 3.0,
+    "pin_height": 7.0,
+    "pin_z": 1.5
+  },
+  "design_variables_raw": {
+    "rad": "4mm",
+    "height": "35mm",
+    "pin_rad": "1.5mm",
+    "pin_heght": "17mm",
+    "chip_offset": "1mm",
+    "chip_wid": "4mm",
+    "chip_len": "20mm",
+    "chip_thick": "0.43mm",
+    "pad_x": "1mm",
+    "pad_y": "0.5mm",
+    "pad_offset": "3mm",
+    "coarse_x": "30um",
+    "coarse_y": "50um",
+    "medium_x": "10um",
+    "medium_y": "30um",
+    "thin_x": "1um",
+    "thin_y": "25um",
+    "jj_x": "1um",
+    "jj_y": "1.9um",
+    "L_JJ": "10nH",
+    "wg_rad": "3mm",
+    "rr_x": "0.3mm",
+    "rr_y": "8mm",
+    "rr_offset": "0.5mm",
+    "pin_offset": "3mm",
+    "pin_height": "7mm",
+    "pin_z": "1.5mm"
+  },
+  "palace_solver": {
+    "target_freq_GHz": 5.0,
+    "n_modes": 2,
+    "solver_order": 1,
+    "tol": 0.001,
+    "amr_max_its": 8
+  }
+}

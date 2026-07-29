@@ -1,0 +1,12 @@
+{
+  "cavity": 1,
+  "chip": 2,
+  "PEC_exterior": 3,
+  "Imped_pin": 4,
+  "Conductivity::Pin_1": 5,
+  "pads": 6,
+  "medium_lead": 7,
+  "thin_lead": 8,
+  "JJ": 9,
+  "RR": 10
+}
