@@ -1,0 +1,9 @@
+{
+  "cavity": 1,
+  "chip": 2,
+  "PEC_exterior": 3,
+  "pads": 4,
+  "medium_lead": 5,
+  "thin_lead": 6,
+  "JJ": 7
+}
