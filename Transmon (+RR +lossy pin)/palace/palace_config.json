@@ -1,0 +1,39 @@
+﻿{
+  "Problem": {
+    "Type": "Eigenmode",
+    "Verbose": 2
+  },
+  "Model": {
+    "Mesh": "transmon_simple_RR_pin_nowire.msh",
+    "L0": 0.001,
+    "Refinement": {
+      "MaxIts": 8,
+      "UpdateFraction": 0.4,
+      "MaxSize": 2000000,
+      "Tol": 0.001,
+      "Nonconformal": false
+    }
+  },
+  "Domains": {
+    "Materials": [
+      {"Attributes": [1], "Permittivity": 1.0, "Permeability": 1.0, "LossTan": 0.0},
+      {"Attributes": [2], "Permittivity": 10.0, "Permeability": 1.0, "LossTan": 0.0}
+    ]
+  },
+  "Boundaries": {
+    "PEC": {"Attributes": [3, 5, 6, 7, 8, 10]},
+    "LumpedPort": [{
+      "Index": 1,
+      "Elements": [{"Attributes": [9], "Direction": [0.0, 1.0, 0.0]}],
+      "R": 0.0,
+      "L": 1e-08,
+      "C": 0.0
+    }],
+    "Impedance": [{"Attributes": [4], "Rs": 50.0, "Ls": 0.0, "Cs": 0.0}]
+  },
+  "Solver": {
+    "Order": 1,
+    "Eigenmode": {"N": 5, "Target": 2.5, "Tol": 1e-06, "MaxIts": 200, "MaxSize": 30, "PEPLinear": true},
+    "Linear": {"Type": "Default", "KSPType": "Default", "Tol": 1e-08, "MaxIts": 1000}
+  }
+}
