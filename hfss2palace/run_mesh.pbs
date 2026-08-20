@@ -1,0 +1,189 @@
+#!/bin/bash
+#PBS -N mesh_run1
+#PBS -q batch_cpu
+#PBS -l select=1:ncpus=36:mem=240gb
+#PBS -l walltime=08:00:00
+#PBS -j oe
+#PBS -o mesh_run1.log
+
+# =====================================================================
+# run_mesh.pbs -- build the Gmsh mesh on Vanda instead of a workstation
+#
+# Nothing in mesh_any.py needs changing to run here. It has no AEDT
+# dependency and no Windows paths; only the export step needs a live
+# HFSS session. Copy the run folder across and submit this.
+#
+# WHAT ACTUALLY GETS FASTER, honestly:
+#   2D surface meshing   parallel, scales with cores. On a workstation
+#                        this ran 64 s wall / 358 s CPU (~5.6 cores);
+#                        36 cores should take it to ~10 s.
+#   booleans, IO         faster on cluster scratch than on a network
+#                        share such as \\qcrew_drive.
+#   3D Delaunay          NOT faster. The classic 3D kernel is single
+#                        threaded, and a cluster core is often SLOWER
+#                        per-core than a modern desktop core. This is
+#                        the phase that eats hours, so expect the total
+#                        wall time to improve only modestly.
+#
+# The real win is being able to queue several meshes at once and walk
+# away, rather than tying up a workstation for each attempt. If you
+# want the 3D phase itself to scale, that needs --algo3d hxt, which is
+# a DISCRETIZATION change (see the A/B test at the bottom).
+# =====================================================================
+
+set -euo pipefail
+
+cd "$PBS_O_WORKDIR"
+
+# ---- environment ----------------------------------------------------
+module purge
+module load miniforge3          # or whatever provides your python
+source activate palace_mesh     # env created once; see SETUP below
+
+# ---- thread count ---------------------------------------------------
+# mesh_any.py's `--threads 0` calls os.cpu_count(), which reports the
+# WHOLE node, not your allocation. On a shared node that oversubscribes
+# and slows everything down. Take the count from PBS instead.
+NCPUS=$(cat "$PBS_NODEFILE" | wc -l)
+[ -z "$NCPUS" ] && NCPUS=36
+export OMP_NUM_THREADS=$NCPUS
+echo "meshing with $NCPUS threads"
+
+# ---- work on local disk, not the network share ----------------------
+# Gmsh writes large files repeatedly; doing that over a network mount
+# was one of the causes of the historical 7-hour mesh times.
+WORK="${TMPDIR:-/tmp}/mesh_$PBS_JOBID"
+mkdir -p "$WORK"
+cp device.step device_config.json mesh_any.py palace_matchers.py \
+   step_bodies.py mesh_stats.py "$WORK"/ 2>/dev/null || true
+cd "$WORK"
+
+# ---- the run --------------------------------------------------------
+TAG=run1
+
+python mesh_any.py \
+  --config device_config.json \
+  --tag "$TAG" \
+  --mesh-order 2 \
+  --curvature-segments 24 \
+  --algo3d delaunay \
+  --threads "$NCPUS" \
+  --no-vtk \
+  --size jj1=0.0005 \
+  --size transmon_thin_lead2=0.0005 \
+  --size transmon_thin_lead3=0.0005 \
+  --size coil_thin=0.0045 \
+  --size coil_transition_1=0.0045 \
+  --size coil_transition_2=0.0045 \
+  --size Sophi_coupler=0.005 \
+  --size narrowi_left=0.005 \
+  --size narrowing_left=0.005 \
+  --size rr_taper_actu=0.005 \
+  --size short_feed=0.005 \
+  --size stub_01=0.005 \
+  --size stub_02=0.005 \
+  --size stub_04=0.005 \
+  --size stub_05=0.005 \
+  --size imp_matched_line_left1=0.007 \
+  --size imp_matched_line_right1=0.007 \
+  --size series_sec_1_upd=0.007 \
+  --size series_sec_2_upd=0.007 \
+  --size series_sec_3_upd=0.007 \
+  --size series_sec_4_upd=0.007 \
+  --size left_lead_fine=0.01 \
+  --size left_lead_fine_1=0.01 \
+  --size coil_start=0.011 \
+  --size left_line_flux=0.011 \
+  --size stub_03=0.012 \
+  --size flux_stub_1=0.0127 \
+  --size flux_stub_5=0.0127 \
+  --size FL_right_line=0.018 \
+  --size NOTCH=0.018 \
+  --size left_line=0.018 \
+  --size right_line1=0.018 \
+  --size series_sec_1=0.018 \
+  --size series_sec_2=0.018 \
+  --size series_sec_3=0.018 \
+  --size series_sec_4=0.018 \
+  --size coil_transition_3=0.02 \
+  --size coil_transition_3_1=0.02 \
+  --size Pad_left=0.0375 \
+  --size Pad_right=0.0375 \
+  --size flux_stub_2=0.041 \
+  --size flux_stub_4=0.041 \
+  --size RR_circle=0.06 \
+  --size flux_stub_3=0.0646 \
+  --size Readout_terminal_tip=0.125 \
+  --size Readout_terminal_rect=0.25 \
+  --size Cavity_pin=1.3 \
+  --size GND=2.5
+
+# NOTE: Line_for_better_meshing is deliberately absent. It carries an
+# HFSS mesh op but is non-model, so it never reaches the STEP, and
+# mesh_any hard-errors on unknown --size names.
+
+# ---- quality + conformity gates ------------------------------------
+python mesh_stats.py "device_${TAG}.msh" || true
+if [ -f mesh_conformity_check.py ]; then
+    python mesh_conformity_check.py "device_${TAG}.msh"
+fi
+
+# ---- copy results back ---------------------------------------------
+cp "device_${TAG}.msh" "device_groups_${TAG}.json" "$PBS_O_WORKDIR"/
+echo "done; results in $PBS_O_WORKDIR"
+
+
+# =====================================================================
+# SETUP (once)
+# =====================================================================
+#
+#   module load miniforge3
+#   conda create -n palace_mesh python=3.11 -y
+#   source activate palace_mesh
+#   pip install gmsh numpy meshio
+#
+# `pip install gmsh` pulls the prebuilt SDK wheel, so there is nothing
+# to compile. Verify before submitting anything long:
+#
+#   python -c "import gmsh; gmsh.initialize(); \
+#              print(gmsh.option.getString('General.Version')); \
+#              gmsh.finalize()"
+#
+# Record that version number. Gmsh's meshing kernels change between
+# releases, so a mesh built here is only comparable to one built on the
+# workstation if the versions match. If they differ, a frequency shift
+# between runs may be the mesher, not the physics.
+#
+# =====================================================================
+# A/B TEST: is hxt worth adopting?
+# =====================================================================
+#
+# The recipe rejected hxt, but that judgement was made on a workstation
+# with roughly 6 effective cores, which is close to the worst case for
+# a kernel whose entire selling point is core scaling. It has never had
+# a fair hardware trial.
+#
+# Two objections are recorded, and only ONE of them is about hardware:
+#   "3-10x faster on multi-core"  -- hardware claim, worth retesting
+#   "packs ~2x denser, different  -- NOT a hardware claim. hxt is a
+#    discretization"                 different insertion kernel and
+#                                    produces a different mesh from the
+#                                    same inputs on any machine.
+#
+# So: test it, do not assume it. Submit this job twice, identical
+# except for --algo3d and --tag, then compare
+#
+#   tet count            (denser = the recipe's concern confirmed)
+#   worst aspect ratio   (from mesh_stats)
+#   conformity check     (must pass, no exceptions)
+#   wall time            (the actual question)
+#   the budget block     (does it still fit under the unknown cap?)
+#
+# If hxt returns a comparable element count AND passes conformity, you
+# have a real speedup and can promote it with evidence. If it returns
+# 2x denser, you have confirmed the concern on better hardware and can
+# stop wondering. Either way it costs one queued job and replaces an
+# inherited assumption with a measurement.
+#
+# Do NOT switch kernels midway through a set of runs you intend to
+# compare against Ansys. Change one thing at a time.
