@@ -1,6 +1,15 @@
-# palace_pipeline
-The full pipeline to take a design from Ansys HFSS and run it using Palace on the HPC, with sample results to be run in pyEPR
+# Palace Pipeline
 
-## palace_pipeline_v2
+Tools and examples for exporting Ansys HFSS designs, generating AWS Palace meshes/configurations, running simulations on Vanda HPC, and analyzing results with pyEPR.
 
-`palace_pipeline_v2/` contains the second-generation, end-to-end HFSS-to-Palace pipeline. It exports device geometry and simulation metadata from HFSS, creates a Gmsh mesh and Palace configuration, and prepares the HPC run artifacts. See [its README](palace_pipeline_v2/README.md) for setup and usage details.
+## Main workflow
+
+Use [`hfss2palace/`](hfss2palace/) for the current pipeline.
+
+1. Open `hfss2palace/palace_pipeline.ipynb`.
+2. Run it from top to bottom with your HFSS design open.
+3. Each run creates a new timestamped run folder beside your `.aedt` file.
+4. Drag that new run folder to Vanda HPC and submit:
+
+   ```bash
+   qsub run_palace.pbs
