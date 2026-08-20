@@ -1,0 +1,89 @@
+{
+  "_description": "Lab-tested HFSS mesh operation sizes for superconducting device components. All values in mm. 'standard' is the recommended default; 'designs' records values individual designs/users converged on. Use these to set Length-Based mesh operations in HFSS (which the exporter propagates to Palace automatically), or as --size overrides / MESH_SIZE_OVERRIDES_MM entries in the pipeline.",
+  "_units": "mm",
+  "_collected": "2026-08",
+  "standard": {
+    "JJ": 0.0002,
+    "thin_lead": 0.0002,
+    "coarse_lead": 0.003
+  },
+  "designs": {
+    "full_enjoy_Hector": {
+      "JJ": 0.0005,
+      "qubit_pads": 0.05,
+      "thin_lead": 0.0005,
+      "coarse_lead": 0.005,
+      "resonator": 0.025,
+      "transmission_lines": 0.05,
+      "cavity_pin": 1.0
+    },
+    "QSP_Clara": {
+      "JJ": 0.0002,
+      "qubit_pads": 0.02,
+      "thin_lead": 0.0002,
+      "coarse_lead": 0.005,
+      "resonator": 0.05,
+      "transmission_lines": 0.05,
+      "cavity_pin": null
+    },
+    "thunder_Celine": {
+      "JJ": 0.0001,
+      "qubit_pads": 0.1,
+      "thin_lead": 0.0002,
+      "coarse_lead": 0.002,
+      "resonator": 0.05,
+      "transmission_lines": null,
+      "cavity_pin": null
+    },
+    "DQLWC_Amon": {
+      "JJ": 0.0004,
+      "qubit_pads": 0.04,
+      "thin_lead": 0.003,
+      "coarse_lead": 0.01,
+      "resonator": 0.05,
+      "transmission_lines": 0.04,
+      "cavity_pin": null,
+      "hairpin": 0.1
+    },
+    "cheddar_MayChee": {
+      "JJ": 0.0003,
+      "qubit_pads": 0.025,
+      "thin_lead": 0.001,
+      "coarse_lead": 0.001,
+      "resonator": 0.5,
+      "transmission_lines": null,
+      "hairpin": 0.05
+    },
+    "Eunice_NiNi": {
+      "JJ": 0.0005,
+      "qubit_pads": 0.05,
+      "thin_lead": 0.005,
+      "coarse_lead": 0.005,
+      "resonator": 0.05,
+      "transmission_lines": 0.012
+    },
+    "2D_Yingshan": {
+      "JJ": 0.0003,
+      "qubit_pads": 0.01,
+      "resonator": 0.05,
+      "hairpin": null
+    },
+    "Kyle": {
+      "JJ": 0.0001,
+      "qubit_pads": 0.1,
+      "thin_lead": 0.01,
+      "coarse_lead": 0.05,
+      "resonator": 0.1,
+      "transmission_lines": 0.1,
+      "hairpin": 1.0
+    }
+  },
+  "ranges_observed": {
+    "JJ": [0.0001, 0.0005],
+    "qubit_pads": [0.01, 0.1],
+    "thin_lead": [0.0002, 0.01],
+    "coarse_lead": [0.001, 0.05],
+    "resonator": [0.025, 0.5],
+    "transmission_lines": [0.012, 0.1]
+  }
+}
